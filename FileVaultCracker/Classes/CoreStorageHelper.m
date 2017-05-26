@@ -104,6 +104,16 @@ NS_ASSUME_NONNULL_END
     return locked;
 }
 
+- ( BOOL )unlockWithAKSUUID: ( NSString * )uuid
+{
+    if( uuid.length == 0 )
+    {
+        return NO;
+    }
+    
+    return NO;
+}
+
 #pragma mark - DMManagerDelegate
 
 

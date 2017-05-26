@@ -36,6 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 - ( BOOL )isValidLogicalVolumeUUID: ( NSString * )uuid;
 - ( BOOL )isEncryptedLogicalVolumeUUID: ( NSString * )uuid;
 - ( BOOL )isLockedLogicalVolumeUUID: ( NSString * )uuid;
+- ( BOOL )unlockWithAKSUUID: ( NSString * )uuid;
 
 @end
 

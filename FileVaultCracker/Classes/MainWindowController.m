@@ -114,7 +114,7 @@ NS_ASSUME_NONNULL_END
     self.commonSubstitutionsMax = [ [ NSUserDefaults standardUserDefaults ] integerForKey: @"CommonSubstitutionsMax" ];
     self.numberOfThreads        = [ [ NSUserDefaults standardUserDefaults ] integerForKey: @"NumberOfThreads" ];
     
-    if( self.numberOfThreads <= 0 || self.numberOfThreads > 200 )
+    if( self.numberOfThreads <= 0 || self.numberOfThreads > 30 )
     {
         self.numberOfThreads = 20;
     }

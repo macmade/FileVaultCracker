@@ -369,12 +369,8 @@ DQ
                                 </buttonCell>
                                 <connections>
                                     <action selector="crack:" target="-2" id="2yQ-kw-IGH"/>
-                                    <binding destination="-2" name="enabled2" keyPath="wordList" previousBinding="p4y-oB-GKV" id="NuY-zb-K7j">
+                                    <binding destination="-2" name="enabled" keyPath="coreStorageUUID" id="p4y-oB-GKV">
                                         <dictionary key="options">
-                                            <integer key="NSMultipleValuesPlaceholder" value="-1"/>
-                                            <integer key="NSNoSelectionPlaceholder" value="-1"/>
-                                            <integer key="NSNotApplicablePlaceholder" value="-1"/>
-                                            <integer key="NSNullPlaceholder" value="-1"/>
                                             <string key="NSValueTransformerName">NSIsNotNil</string>
                                         </dictionary>
                                     </binding>
@@ -387,8 +383,12 @@ DQ
                                             <string key="NSValueTransformerName">NSNegateBoolean</string>
                                         </dictionary>
                                     </binding>
-                                    <binding destination="-2" name="enabled" keyPath="coreStorageUUID" id="p4y-oB-GKV">
+                                    <binding destination="-2" name="enabled2" keyPath="wordList" previousBinding="p4y-oB-GKV" id="NuY-zb-K7j">
                                         <dictionary key="options">
+                                            <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                            <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                            <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                            <integer key="NSNullPlaceholder" value="-1"/>
                                             <string key="NSValueTransformerName">NSIsNotNil</string>
                                         </dictionary>
                                     </binding>

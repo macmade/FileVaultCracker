@@ -27,8 +27,12 @@
  * @copyright   (c) 2017, Jean-David Gadina - www.xs-labs.com
  */
 
+@import Cocoa;
+
 #import "FileVaultCracker.h"
 #import "NSString+FileVaultCracker.h"
+#import "CoreStorageHelper.h"
+#import "CSFDE.h"
 #import <stdatomic.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -72,6 +76,8 @@ NS_ASSUME_NONNULL_END
 
 - ( nullable instancetype )initWithCoreStorageUUID: ( NSString * )coreStorageUUID passwords: ( NSArray< NSString * > * )passwords
 {
+    CoreStorageHelper * cs;
+    
     if( ( self = [ super init ] ) )
     {
         self.coreStorageUUID = coreStorageUUID;
@@ -79,6 +85,28 @@ NS_ASSUME_NONNULL_END
         self.foundPasswords  = [ NSMutableArray new ];
         
         if( self.passwords.count == 0 )
+        {
+            return nil;
+        }
+        
+        if( self.coreStorageUUID.length == 0 )
+        {
+            return nil;
+        }
+        
+        cs = [ CoreStorageHelper new ];
+        
+        if( [ cs isValidLogicalVolumeUUID: self.coreStorageUUID ] == NO )
+        {
+            return nil;
+        }
+        
+        if( [ cs isEncryptedLogicalVolumeUUID: self.coreStorageUUID ] == NO )
+        {
+            return nil;
+        }
+        
+        if( [ cs isLockedLogicalVolumeUUID: self.coreStorageUUID ] == NO )
         {
             return nil;
         }
@@ -263,7 +291,9 @@ NS_ASSUME_NONNULL_END
 
 - ( void )crackPasswords: ( NSArray< NSString * > * )passwords
 {
-    NSString * p;
+    NSString          * p;
+    CoreStorageHelper * cs;
+    CFStringRef         aks;
     
     @autoreleasepool
     {
@@ -273,6 +303,8 @@ NS_ASSUME_NONNULL_END
         {
             self.threadsRunning = self.threadsRunning + 1;
         }
+        
+        cs = [ CoreStorageHelper new ];
         
         for( p in passwords )
         {
@@ -288,17 +320,48 @@ NS_ASSUME_NONNULL_END
             
             atomic_fetch_add( &( self->_processed ), 1 );
             
-            if( NO ) /* TODO */
+            aks = CSFDEStorePassphrase( p.UTF8String );
+            
+            if( aks == nil )
             {
-                /*
                 @synchronized( self )
                 {
-                    atomic_store( &( self->_unlocked ), true );
+                    if( atomic_load( &_stopping ) == YES )
+                    {
+                        break;
+                    }
                     
-                    break;
+                    atomic_store( &( self->_stopping ), true );
+                    
+                    dispatch_sync
+                    (
+                        dispatch_get_main_queue(),
+                        ^( void )
+                        {
+                            NSAlert * alert;
+                            
+                            alert                 = [ NSAlert new ];
+                            alert.messageText     = NSLocalizedString( @"AKS Error", @"" );
+                            alert.informativeText = NSLocalizedString( @"Could not store a passphrase with ASK. Please start again with fewer threads. Note that you may need to restart your computer.", @"" );
+                            
+                            [ alert addButtonWithTitle: NSLocalizedString( @"Quit", @"" ) ];
+                            [ alert runModal ];
+                        }
+                    );
                 }
-                */
+                
+                break;
             }
+            
+            if( [ cs unlockWithAKSUUID: ( __bridge NSString * )aks ] )
+            {
+                CSFDERemovePassphrase( aks );
+                atomic_store( &( self->_unlocked ), true );
+                
+                break;
+            }
+            
+            CSFDERemovePassphrase( aks );
         }
     }
     
