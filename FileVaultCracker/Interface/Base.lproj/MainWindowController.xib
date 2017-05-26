@@ -287,7 +287,7 @@
                                             </textField>
                                             <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6Lh-9i-k21">
                                                 <rect key="frame" x="20" y="19" width="604" height="18"/>
-                                                <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" minValue="1" maxValue="200" doubleValue="50" tickMarkPosition="above" numberOfTickMarks="50" sliderType="linear" id="nVX-QZ-lhl"/>
+                                                <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" minValue="1" maxValue="30" doubleValue="30" tickMarkPosition="above" numberOfTickMarks="30" sliderType="linear" id="nVX-QZ-lhl"/>
                                                 <connections>
                                                     <binding destination="-2" name="value" keyPath="numberOfThreads" id="Aau-IF-DSk"/>
                                                 </connections>
