@@ -353,7 +353,7 @@ NS_ASSUME_NONNULL_END
     
     if( [ cs isValidLogicalVolumeUUID: uuid ] == NO )
     {
-        alert.informativeText = NSLocalizedString( @"UUID is not a valid CoreStorage volume UUID", nil );
+        alert.informativeText = NSLocalizedString( @"UUID is not a valid CoreStorage volume UUID.", nil );
         
         [ alert beginSheetModalForWindow: self.window completionHandler: NULL ];
         
@@ -362,7 +362,7 @@ NS_ASSUME_NONNULL_END
     
     if( [ cs isEncryptedLogicalVolumeUUID: uuid ] == NO )
     {
-        alert.informativeText = NSLocalizedString( @"Volume is not encrypted", nil );
+        alert.informativeText = NSLocalizedString( @"Volume is not encrypted.", nil );
         
         [ alert beginSheetModalForWindow: self.window completionHandler: NULL ];
         
@@ -371,7 +371,7 @@ NS_ASSUME_NONNULL_END
     
     if( [ cs isLockedLogicalVolumeUUID: uuid ] == NO )
     {
-        alert.informativeText = NSLocalizedString( @"Volume is already unlocked", nil );
+        alert.informativeText = NSLocalizedString( @"Volume is already unlocked.", nil );
         
         [ alert beginSheetModalForWindow: self.window completionHandler: NULL ];
         
