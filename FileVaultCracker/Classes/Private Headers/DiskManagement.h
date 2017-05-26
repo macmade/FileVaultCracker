@@ -56,6 +56,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property( atomic, readonly, nullable          ) NSArray                     * topLevelDisks;
 @property( atomic, readonly, nullable          ) NSArray                     * disks;
 @property( atomic, readwrite, assign, nullable ) DASessionRef                  defaultDASession;
+@property( atomic, readwrite, strong, nullable ) NSString                    * language;
 
 + ( instancetype )sharedManager;
 + ( instancetype )sharedManagerForThread;
@@ -76,6 +77,9 @@ NS_ASSUME_NONNULL_BEGIN
 - ( int )logicalVolumeGroups: ( NSArray< NSString * > * _Nullable * _Nullable )groups;
 - ( int )logicalVolumeForDisk: ( DADiskRef )disk logicalVolume: ( NSString * _Nullable * _Nullable )logicalVolume;
 - ( int )physicalVolumeAndLogicalVolumeGroupForDisk:( DADiskRef )disk physicalVolume: ( NSString * _Nullable * _Nullable )physicalVolume logicalVolumeGroup: ( NSString * _Nullable * _Nullable )logicalVolumeGroup;
+- ( int )logicalVolumeGroupForLogicalVolume: ( NSString * )uuid logicalVolumeGroup:( NSString * _Nullable * _Nullable )group;
+- ( int )copyDiskForLogicalVolume: ( NSString * )uuid disk: ( DADiskRef _Nullable * _Nullable )disk;
+- ( int )isEncryptedDiskForLogicalVolume: ( NSString * )uuid encrypted:( BOOL * _Nullable )encrypted locked: ( BOOL * _Nullable )locked type: ( id _Nullable * _Nullable )type;
 
 @end
 
