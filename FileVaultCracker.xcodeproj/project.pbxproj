@@ -18,6 +18,8 @@
 		0527C4251ED084FB00E002DC /* words.txt in Resources */ = {isa = PBXBuildFile; fileRef = 0527C4241ED084FB00E002DC /* words.txt */; };
 		05CF78A21ED8785D00A18671 /* NSString+FileVaultCracker.m in Sources */ = {isa = PBXBuildFile; fileRef = 05CF78A11ED8785D00A18671 /* NSString+FileVaultCracker.m */; };
 		05CF78A51ED8789900A18671 /* FileVaultCracker.m in Sources */ = {isa = PBXBuildFile; fileRef = 05CF78A41ED8789900A18671 /* FileVaultCracker.m */; };
+		05CF78AD1ED882E500A18671 /* DiskManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05CF78AC1ED882E500A18671 /* DiskManagement.framework */; };
+		05CF78AF1ED882F200A18671 /* libcsfde.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 05CF78AE1ED882F200A18671 /* libcsfde.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +41,10 @@
 		05CF78A11ED8785D00A18671 /* NSString+FileVaultCracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+FileVaultCracker.m"; sourceTree = "<group>"; };
 		05CF78A31ED8789900A18671 /* FileVaultCracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileVaultCracker.h; sourceTree = "<group>"; };
 		05CF78A41ED8789900A18671 /* FileVaultCracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileVaultCracker.m; sourceTree = "<group>"; };
+		05CF78A91ED8820100A18671 /* CSFDE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSFDE.h; sourceTree = "<group>"; };
+		05CF78AA1ED8820100A18671 /* DiskManagement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiskManagement.h; sourceTree = "<group>"; };
+		05CF78AC1ED882E500A18671 /* DiskManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DiskManagement.framework; path = ../../../../../../System/Library/PrivateFrameworks/DiskManagement.framework; sourceTree = "<group>"; };
+		05CF78AE1ED882F200A18671 /* libcsfde.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcsfde.dylib; path = ../../../../../../usr/lib/libcsfde.dylib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,6 +52,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05CF78AF1ED882F200A18671 /* libcsfde.dylib in Frameworks */,
+				05CF78AD1ED882E500A18671 /* DiskManagement.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -57,6 +65,7 @@
 			children = (
 				05213FD11ECF13330093F9F1 /* FileVaultCracker */,
 				05213FAC1ECED9960093F9F1 /* Products */,
+				05CF78AB1ED882E400A18671 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -101,6 +110,7 @@
 				05213FFC1ECF16300093F9F1 /* MainWindowController.m */,
 				05CF78A01ED8785D00A18671 /* NSString+FileVaultCracker.h */,
 				05CF78A11ED8785D00A18671 /* NSString+FileVaultCracker.m */,
+				05CF78A81ED881A100A18671 /* Private Headers */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -130,6 +140,24 @@
 				0527C4241ED084FB00E002DC /* words.txt */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		05CF78A81ED881A100A18671 /* Private Headers */ = {
+			isa = PBXGroup;
+			children = (
+				05CF78A91ED8820100A18671 /* CSFDE.h */,
+				05CF78AA1ED8820100A18671 /* DiskManagement.h */,
+			);
+			path = "Private Headers";
+			sourceTree = "<group>";
+		};
+		05CF78AB1ED882E400A18671 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				05CF78AE1ED882F200A18671 /* libcsfde.dylib */,
+				05CF78AC1ED882E500A18671 /* DiskManagement.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -466,6 +494,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
+				);
 				INFOPLIST_FILE = FileVaultCracker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.xs-labs.FileVaultCracker";
@@ -477,6 +509,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
+				);
 				INFOPLIST_FILE = FileVaultCracker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.xs-labs.FileVaultCracker";
