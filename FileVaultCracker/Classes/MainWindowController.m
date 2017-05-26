@@ -29,6 +29,7 @@
 
 #import "MainWindowController.h"
 #import "FileVaultCracker.h"
+#import "CoreStorageHelper.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -60,6 +61,7 @@ NS_ASSUME_NONNULL_BEGIN
 - ( void )displayAlertWithTitle: ( NSString * )title message: ( NSString * )message;
 - ( void )updateUI;
 - ( NSString * )timeRemainingWithSeconds: ( NSUInteger )seconds;
+- ( BOOL )verifyVolumeUUID: ( NSString * )uuid;
 
 @end
 
@@ -153,6 +155,11 @@ NS_ASSUME_NONNULL_END
     ( void )sender;
     
     if( self.cracker != nil )
+    {
+        return;
+    }
+    
+    if( [ self verifyVolumeUUID: self.coreStorageUUID ] == NO )
     {
         return;
     }
@@ -331,6 +338,47 @@ NS_ASSUME_NONNULL_END
     }
     
     return [ NSString stringWithFormat: @"Estimated time remaining: about %.02f %@", value, unit ];
+}
+
+- ( BOOL )verifyVolumeUUID: ( NSString * )uuid
+{
+    CoreStorageHelper * cs;
+    NSAlert           * alert;
+    
+    cs    = [ CoreStorageHelper new ];
+    alert = [ NSAlert new ];
+    
+    [ alert setMessageText: NSLocalizedString( @"Error", nil ) ];
+    [ alert addButtonWithTitle: NSLocalizedString( @"OK", nil ) ];
+    
+    if( [ cs isValidLogicalVolumeUUID: uuid ] == NO )
+    {
+        alert.informativeText = NSLocalizedString( @"UUID is not a valid CoreStorage volume UUID", nil );
+        
+        [ alert beginSheetModalForWindow: self.window completionHandler: NULL ];
+        
+        return NO;
+    }
+    
+    if( [ cs isEncryptedLogicalVolumeUUID: uuid ] == NO )
+    {
+        alert.informativeText = NSLocalizedString( @"Volume is not encrypted", nil );
+        
+        [ alert beginSheetModalForWindow: self.window completionHandler: NULL ];
+        
+        return NO;
+    }
+    
+    if( [ cs isLockedLogicalVolumeUUID: uuid ] == NO )
+    {
+        alert.informativeText = NSLocalizedString( @"Volume is already unlocked", nil );
+        
+        [ alert beginSheetModalForWindow: self.window completionHandler: NULL ];
+        
+        return NO;
+    }
+    
+    return YES;
 }
 
 @end
