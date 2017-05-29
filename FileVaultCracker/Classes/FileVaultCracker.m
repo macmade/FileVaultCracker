@@ -94,7 +94,7 @@ NS_ASSUME_NONNULL_END
             return nil;
         }
         
-        cs = [ CoreStorageHelper new ];
+        cs = [ CoreStorageHelper sharedInstance ];
         
         if( [ cs isValidLogicalVolumeUUID: self.coreStorageUUID ] == NO )
         {
@@ -294,6 +294,7 @@ NS_ASSUME_NONNULL_END
     NSString          * p;
     CoreStorageHelper * cs;
     CFStringRef         aks;
+    NSString          * volumeUUID;
     
     @autoreleasepool
     {
@@ -304,7 +305,8 @@ NS_ASSUME_NONNULL_END
             self.threadsRunning = self.threadsRunning + 1;
         }
         
-        cs = [ CoreStorageHelper new ];
+        cs         = [ CoreStorageHelper new ];
+        volumeUUID = self.coreStorageUUID;
         
         for( p in passwords )
         {
@@ -353,7 +355,7 @@ NS_ASSUME_NONNULL_END
                 break;
             }
             
-            if( [ cs unlockWithAKSUUID: ( __bridge NSString * )aks ] )
+            if( [ cs unlockLogicalVolumeUUID: volumeUUID withAKSUUID: ( __bridge NSString * )aks ] )
             {
                 CSFDERemovePassphrase( aks );
                 atomic_store( &( self->_unlocked ), true );

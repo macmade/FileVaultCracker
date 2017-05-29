@@ -31,13 +31,13 @@
 
 #import "CoreStorageHelper.h"
 #import "DiskManagement.h"
+#import <stdatomic.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CoreStorageHelper() < DMManagerDelegate >
+@interface CoreStorageHelper() < DMManagerDelegate, DMManagerClientDelegate >
 {
-    DASessionRef _session;
-    CFRunLoopRef _runLoop;
+    atomic_bool _unlocked;
 }
 
 @property( atomic, readwrite, strong ) DMManager     * manager;
@@ -49,30 +49,35 @@ NS_ASSUME_NONNULL_END
 
 @implementation CoreStorageHelper
 
++ ( instancetype )sharedInstance
+{
+    static dispatch_once_t once;
+    static id              instance = nil;
+    
+    dispatch_once
+    (
+        &once,
+        ^( void )
+        {
+            instance = [ self new ];
+        }
+    );
+    
+    return instance;
+}
+
 - ( instancetype )init
 {
     if( ( self = [ super init ] ) )
     {
-        _session = DASessionCreate( NULL );
-        _runLoop = CFRunLoopGetCurrent();
-        
-        CFRetain( _runLoop );
-        DASessionScheduleWithRunLoop( _session, _runLoop, kCFRunLoopDefaultMode );
-        
-        self.manager                  = [ DMManager sharedManagerForThread ];
-        self.manager.defaultDASession = _session;
-        self.manager.language         = @"English";
-        self.manager.delegate         = self;
-        self.cs                       = [ [ DMCoreStorage alloc ] initWithManager: self.manager ];
+        self.manager                = [ DMManager new ];
+        self.manager.language       = @"English";
+        self.manager.delegate       = self;
+        self.manager.clientDelegate = self;
+        self.cs                     = [ [ DMCoreStorage alloc ] initWithManager: self.manager ];
     }
     
     return self;
-}
-
-- ( void )dealloc
-{
-    DASessionUnscheduleFromRunLoop( _session, _runLoop, kCFRunLoopDefaultMode );
-    CFRelease( _session );
 }
 
 - ( BOOL )isValidLogicalVolumeUUID: ( NSString * )uuid
@@ -104,18 +109,76 @@ NS_ASSUME_NONNULL_END
     return locked;
 }
 
-- ( BOOL )unlockWithAKSUUID: ( NSString * )uuid
+- ( BOOL )unlockLogicalVolumeUUID: ( NSString * )volumeUUID withAKSUUID: ( NSString * )aksUUID
 {
-    if( uuid.length == 0 )
+    NSMutableDictionary * options;
+    
+    atomic_store( &_unlocked, false );
+    
+    if( volumeUUID.length == 0 || aksUUID.length == 0 )
     {
         return NO;
     }
     
-    return NO;
+    options =
+    @{
+        @"lvuuid"  : volumeUUID,
+        @"options" :
+        @{
+            @"AKSPassphraseUUID" : aksUUID
+        }
+    }
+    .mutableCopy;
+    
+    [ self.cs unlockLogicalVolume: @"FBBE529E-D6C1-4897-8200-07B668A32D5C" options: options[ @"options" ] ];
+    
+    CFRunLoopRun();
+    
+    return atomic_load( &_unlocked );
 }
 
 #pragma mark - DMManagerDelegate
 
+- ( void )dmInterruptibilityChanged: ( BOOL )value
+{
+    ( void )value;
+}
 
+- ( void )dmAsyncFinishedForDisk: ( DADiskRef )disk mainError: ( int )mainError detailError: ( int )detailError dictionary: ( NSDictionary * )dictionary
+{
+    ( void )disk;
+    ( void )mainError;
+    ( void )detailError;
+    ( void )dictionary;
+    
+    CFRunLoopStop( CFRunLoopGetCurrent() );
+}
+
+- ( void )dmAsyncMessageForDisk: ( DADiskRef )disk string: ( NSString * )str dictionary: ( NSDictionary * )dict
+{
+    NSNumber * n;
+    
+    ( void )disk;
+    ( void )str;
+    
+    n = [ dict objectForKey: @"LVFUnlockSuccessful" ];
+    
+    if( n && [ n isKindOfClass: [ NSNumber class ] ] && [ n isEqual: @1 ] )
+    {
+        atomic_store( &_unlocked, true );
+    }
+}
+
+- ( void )dmAsyncProgressForDisk: ( DADiskRef )disk barberPole: ( BOOL )barberPole percent: ( float )percent
+{
+    ( void )disk;
+    ( void )barberPole;
+    ( void )percent;
+}
+
+- ( void )dmAsyncStartedForDisk: ( DADiskRef )disk
+{
+    ( void )disk;
+}
 
 @end

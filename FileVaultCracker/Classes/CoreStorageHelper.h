@@ -33,10 +33,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CoreStorageHelper: NSObject
 
++ ( instancetype )sharedInstance;
+
 - ( BOOL )isValidLogicalVolumeUUID: ( NSString * )uuid;
 - ( BOOL )isEncryptedLogicalVolumeUUID: ( NSString * )uuid;
 - ( BOOL )isLockedLogicalVolumeUUID: ( NSString * )uuid;
-- ( BOOL )unlockWithAKSUUID: ( NSString * )uuid;
+- ( BOOL )unlockLogicalVolumeUUID: ( NSString * )volumeUUID withAKSUUID: ( NSString * )aksUUID;
 
 @end
 

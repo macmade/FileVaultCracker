@@ -72,7 +72,7 @@ NS_ASSUME_NONNULL_BEGIN
 - ( instancetype )initWithManager: ( DMManager * )manager;
 
 - ( int )unlockLogicalVolume: ( NSString * )volumeUID options: ( NSDictionary * )options;
-- ( int )doCallDaemonForCoreStorage: ( NSString * )selector inputDict: ( NSDictionary * )inputDict outputDict: ( NSDictionary  * _Nullable * _Nullable )outputDict checkDelegate: ( BOOL )checkDelegate sync: ( BOOL )sync;
+- ( int )doCallDaemonForCoreStorage: ( NSString * )selector inputDict: ( NSMutableDictionary * )inputDict outputDict: ( NSDictionary  * _Nullable * _Nullable )outputDict checkDelegate: ( BOOL )checkDelegate sync: ( BOOL )sync;
 
 - ( int )logicalVolumeGroups: ( NSArray< NSString * > * _Nullable * _Nullable )groups;
 - ( int )logicalVolumeForDisk: ( DADiskRef )disk logicalVolume: ( NSString * _Nullable * _Nullable )logicalVolume;

@@ -345,7 +345,7 @@ NS_ASSUME_NONNULL_END
     CoreStorageHelper * cs;
     NSAlert           * alert;
     
-    cs    = [ CoreStorageHelper new ];
+    cs    = [ CoreStorageHelper sharedInstance ];
     alert = [ NSAlert new ];
     
     [ alert setMessageText: NSLocalizedString( @"Error", nil ) ];
