@@ -196,7 +196,7 @@ NS_ASSUME_NONNULL_END
     
     self.running = YES;
     
-    [ self.cracker crack: ^( BOOL volumeMounted )
+    [ self.cracker crack: ^( BOOL volumeMounted, NSString * _Nullable password )
         {
             dispatch_async
             (
@@ -207,7 +207,7 @@ NS_ASSUME_NONNULL_END
                     {
                         if( volumeMounted )
                         {
-                            [ self displayAlertWithTitle: @"Password found" message: @"The FileVault volume has been successfully mounted." ];
+                            [ self displayAlertWithTitle: @"Password found" message: [ NSString stringWithFormat: @"The FileVault volume has been successfully mounted. Password is: %@", password ] ];
                         }
                         else
                         {

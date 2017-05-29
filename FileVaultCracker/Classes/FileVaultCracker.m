@@ -56,7 +56,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property( atomic, readwrite, assign           ) NSUInteger                     lastProcessed;
 @property( atomic, readwrite, assign           ) NSUInteger                     secondsRemaining;
 @property( atomic, readwrite, strong, nullable ) NSTimer                      * timer;
-@property( atomic, readwrite, strong, nullable ) void ( ^ completion )( BOOL volumeMounted );
+@property( atomic, readwrite, strong, nullable ) NSString                     * password;
+@property( atomic, readwrite, strong, nullable ) void ( ^ completion )( BOOL volumeMounted, NSString * _Nullable password );
 
 - ( void )crack;
 - ( void )generateVariants: ( NSMutableArray< NSString * > * )passwords withSelector: ( SEL )selector maxChars: ( NSUInteger )maxChars message: ( NSString * )message;
@@ -115,7 +116,7 @@ NS_ASSUME_NONNULL_END
     return self;
 }
 
-- ( void )crack: ( void ( ^ )( BOOL volumeMounted ) )completion
+- ( void )crack: ( void ( ^ )( BOOL volumeMounted, NSString * _Nullable password ) )completion
 {
     @synchronized( self )
     {
@@ -360,6 +361,8 @@ NS_ASSUME_NONNULL_END
                 CSFDERemovePassphrase( aks );
                 atomic_store( &( self->_unlocked ), true );
                 
+                self.password = p;
+                
                 break;
             }
             
@@ -437,7 +440,7 @@ NS_ASSUME_NONNULL_END
         
         if( self.completion )
         {
-            self.completion( found );
+            self.completion( found, self.password );
         }
         
         self.completion = NULL;

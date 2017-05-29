@@ -42,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property( atomic, readwrite, assign  ) NSUInteger maxCharsForCommonSubstitutions;
 
 - ( nullable instancetype )initWithCoreStorageUUID: ( NSString * )coreStorageUUID passwords: ( NSArray< NSString * > * )passwords NS_DESIGNATED_INITIALIZER;
-- ( void )crack: ( void ( ^ )( BOOL volumeMounted ) )completion;
+- ( void )crack: ( void ( ^ )( BOOL volumeMounted, NSString * _Nullable password ) )completion;
 - ( void )stop;
 
 @end
