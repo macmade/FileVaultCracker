@@ -347,7 +347,7 @@ NS_ASSUME_NONNULL_END
                             alert.messageText     = NSLocalizedString( @"AKS Error", @"" );
                             alert.informativeText = NSLocalizedString( @"Could not store a passphrase with ASK. Please start again with fewer threads. Note that you may need to restart your computer.", @"" );
                             
-                            [ alert addButtonWithTitle: NSLocalizedString( @"Quit", @"" ) ];
+                            [ alert addButtonWithTitle: NSLocalizedString( @"OK", @"" ) ];
                             [ alert runModal ];
                         }
                     );
