@@ -130,7 +130,7 @@ NS_ASSUME_NONNULL_END
     }
     .mutableCopy;
     
-    [ self.cs unlockLogicalVolume: @"FBBE529E-D6C1-4897-8200-07B668A32D5C" options: options[ @"options" ] ];
+    [ self.cs unlockLogicalVolume: volumeUUID options: options[ @"options" ] ];
     
     CFRunLoopRun();
     
